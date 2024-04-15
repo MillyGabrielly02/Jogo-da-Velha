@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Jogo da velha</title>
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+ </head>
+ <body>
+    <h1>JOGO DA VELHA</h1>
+    <hr>
+    <br>
+    <div id="board" class="board">
+        <div class="cell" onclick="makeMove(0)"></div>
+        <div class="cell" onclick="makeMove(1)"></div>
+        <div class="cell" onclick="makeMove(2)"></div>
+        <div class="cell" onclick="makeMove(3)"></div>
+        <div class="cell" onclick="makeMove(4)"></div>
+        <div class="cell" onclick="makeMove(5)"></div>
+        <div class="cell" onclick="makeMove(6)"></div>
+        <div class="cell" onclick="makeMove(7)"></div>
+        <div class="cell" onclick="makeMove(8)"></div>
+    </div>
+    <body class="container">
+        <p class="turn">Vez do jogador: <span id="player">X</span></p>
+        <button onclick="resetGame()" class="reset-btn">Reiniciar</button>
+    </body>
+    <script>
+                            //Jogador da vez (primeiro jogador "X")
+                        let currentPlayer = 'X';
+                        //As casas do tabuleiro de primeira vazias
+                    let board = ['', '', '', '', '', '', '', '', ''];
+
+                    function makeMove(index) {
+                        //verfica se a célula está vazia antes do jogador fazer seu movimento
+                        if (!board[index]) {
+                        //Exibe a jogada atual atualizando o tabuleiro
+                            board[index] = currentPlayer;
+                            document.getElementsByClassName('cell')[index].innerText = 
+                            currentPlayer;
+                        //Muda pro próximo jogador
+                            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                        //Mostra o jogador da vez
+                            document.getElementById('player').innerText = currentPlayer;
+                        //Verifica se já possui um ganhador após a última jogada
+                            checkWinner();
+                        }
+                    }
+                    //Declaração das casas que podem significar uma possível vitória quando   preenchidas
+                    function checkWinner() {
+                        const winningConditions = [
+                            [0, 1, 2],
+                            [3, 4, 5],
+                            [6, 7, 8],
+                            [0, 3, 6],
+                            [1, 4, 7],
+                            [2, 5, 8],
+                            [0, 4, 8],
+                            [2, 4, 6]
+                        ];
+                    //Verificar se houve um empate
+                        let draw = true;
+                        for (let condition of winningConditions) {
+                            const [a, b, c] = condition;
+                            if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+                    //Exibe um alerta se houver um vencedor
+                                alert(`Jogador ${board[a]} venceu!`);
+                    //Reinicia o jogo para uma nova partida
+                                resetGame();
+                    //Define que não houve empate já que teve um vencedor
+                                draw = false;
+                                break;
+                            }
+                        }
+
+                        if (draw && board.every(cell => cell !== '')) {
+                    //Exibe um alerta se houver empate avisando sobre
+                            alert('Empate!');
+                    //Reinicia o jogo para uma nova partida
+                            resetGame();
+                        }
+                    }
+                    //Função de reiniciar jogo
+                    function resetGame() {
+                    //Coloca o jogador inicial como "X"
+                        currentPlayer = 'X';
+                    //Reinicia o tabuleiro para ficar com as células vázias
+                        board = ['', '', '', '', '', '', '', '', ''];
+                    //Mostra o jogador da vez
+                        document.getElementById('player').innerText = currentPlayer;
+                        const cells = document.getElementsByClassName('cell');
+                        for (let cell of cells) {
+                            cell.innerText = '';
+                        }
+                    }
+
+    </script>
+  </body>
+</html>
